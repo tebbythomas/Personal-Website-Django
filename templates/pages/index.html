@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <title>Tebby Thomas</title>
+      <!-- Bootstrap core CSS -->
+      <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+      <!-- Custom fonts for this template -->
+      <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+      <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+      <!-- Theme CSS -->
+      <link href="{% static 'css/freelancer.min.css' %}" rel="stylesheet">
+      <!-- Custom styles for this template -->
+      <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
+   </head>
+   <body id="page-top">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+         <a class="navbar-brand js-scroll-trigger" href="#page-top">
+         <span class="d-block d-lg-none">Tebby Thomas</span>
+         <span class="d-none d-lg-block">
+         <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{{personal_detail.profile_pic.url}}" alt="">
+         </span>
+         </a>
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+               <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="#about">About</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="#experience">Experience</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="#education">Education</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="#skills">Skills</a>
+               </li>
+               <li class="nav-item">
+                  <a class="nav-link js-scroll-trigger" href="#certifications">Certifications</a>
+               </li>
+            </ul>
+         </div>
+      </nav>
+      <div class="container-fluid p-0">
+         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
+            <div class="w-100">
+               <h1 class="mb-0">Tebby
+                  <span class="text-primary">Thomas</span>
+               </h1>
+               <div class="subheading mb-3" >
+                  <audio controls data-toggle="tooltip" title="Pronunciation">
+                     <source src="{% static 'media/pronunciation.mp3' %}" type="audio/mpeg">
+                     Your browser does not support the audio element.
+                  </audio>
+               </div>
+               <p class="lead mb-5">
+                  <b>
+                  <a href="mailto:{{personal_detail.email}}">{{personal_detail.email}}</a>
+                  </b>
+                  <br>
+                  {{personal_detail.location}}
+               </p>
+               <p class="lead mb-8"><b>{{personal_detail.headline}}</b></p>
+               <div class="social-icons">
+                  <a href="https://www.linkedin.com/in/tebby-thomas/" target="_blank" data-toggle="tooltip" title="Linkedin">
+                  <i class="fab fa-linkedin-in" ></i>
+                  </a>
+                  <a href="https://github.com/tebbythomas" target="_blank" data-toggle="tooltip" title="Github">
+                  <i class="fab fa-github"></i>
+                  </a>
+                  <a href="https://www.upwork.com/o/profiles/users/~01ffb805d6d2ec1cd2/" target="_blank" data-toggle="tooltip" title="Upwork">
+                  <i class="fas fa-briefcase"></i>
+                  </a>
+                  <a href="{{personal_detail.resume.url}}" target="_blank" data-toggle="tooltip" title="Resume">
+                  <i class="fas fa-file"></i>
+                  </a>
+               </div>
+            </div>
+         </section>
+         <hr class="m-0">
+         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="portfolio">
+            <div class="w-100">
+               <h2 class="mb-5">Portfolio</h2>
+               <p class="lead mb-5"><b>Click each image for Github, Live Demo links</b></p>
+               <!-- Portfolio Grid Items -->
+               <div class="row">
+                  {% for project in projects %}
+                  <!-- Portfolio Item 1 -->
+                  <div class="col-md-6 col-lg-4">
+                     <div class="portfolio-item mx-auto" data-toggle="modal" data-target="#portfolioModal{{ project.id }}">
+                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                           <div class="portfolio-item-caption-content text-center text-white">
+                              <i class="fas fa-plus fa-3x"></i>
+                           </div>
+                        </div>
+                        <img class="img-fluid" src="{{ project.project_image.url }}" alt="">
+                        <br>
+                        <br>
+                        <div class="subheading mb-3"><b><u>{{ project.title }}</u></b> - [Click]</div>
+                     </div>
+                  </div>
+                  {% endfor %}
+               </div>
+            </div>
+            <!-- /.row -->
+      </div>
+      </section>
+      <hr class="m-0">
+      <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="experience">
+         <div class="w-100">
+            <h2 class="mb-5">Experience</h2>
+            {% for job in jobs %}
+            <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
+               <div class="resume-content">
+                  <h3 class="mb-0">{{ job.title }}</h3>
+                  <div class="subheading mb-3">{{ job.location }}</div>
+                  <p>{{ job.description }}</p>
+               </div>
+               <div class="resume-date text-md-right">
+                  <span class="text-primary">{{ job.start_date|date:'F' }} {{ job.start_date.year }} - 
+                  {% if job.present_job == True %} 
+                  Present
+                  {% else %} 
+                  {{ job.end_date|date:'F' }} {{ job.end_date.year }} 
+                  {% endif %}
+                  </span>
+               </div>
+            </div>
+            {% endfor %}
+         </div>
+      </section>
+      <hr class="m-0">
+      <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="education">
+         <div class="w-100">
+            <h2 class="mb-5">Education</h2>
+            <div class="resume-item d-flex flex-column flex-md-row justify-content-between mb-5">
+               <div class="resume-content">
+                  <h3 class="mb-0">Manipal Institute of Technology, India</h3>
+                  <div class="subheading mb-3">Master of Technology</div>
+                  <div>Computer Science and Engineering</div>
+                  <!-- <p>GPA: 8.16 / 10</p> -->
+               </div>
+               <div class="resume-date text-md-right">
+                  <span class="text-primary">2016 - 2018</span>
+               </div>
+            </div>
+            <div class="resume-item d-flex flex-column flex-md-row justify-content-between">
+               <div class="resume-content">
+                  <h3 class="mb-0">Amrita Vishwa Vidyapeetham University, India</h3>
+                  <div class="subheading mb-3">Bachelor of Technology</div>
+                  <div>Computer Science and Engineering</div>
+                  <!-- <p>GPA: 7.73 / 10</p> -->
+               </div>
+               <div class="resume-date text-md-right">
+                  <span class="text-primary">2007 - 2011</span>
+               </div>
+            </div>
+         </div>
+      </section>
+      <hr class="m-0">
+      <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="skills">
+         <div class="w-100">
+            <h2 class="mb-5">Skills</h2>
+            <div class="subheading mb-3">Programming Languages &amp; Tools</div>
+            <ul class="list-inline dev-icons">
+               <li class="list-inline-item">
+                  <i class="fab fa-html5" data-toggle="tooltip" title="HTML5"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-css3-alt" data-toggle="tooltip" title="CSS3"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-js-square" data-toggle="tooltip" title="SQUARE"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-angular" data-toggle="tooltip" title="Angular JS"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-react" data-toggle="tooltip" title="React JS"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-node-js" data-toggle="tooltip" title="Node JS"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-sass" data-toggle="tooltip" title="SASS"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fas fa-database" data-toggle="tooltip" title="SQL, PostgreSQL"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-python" data-toggle="tooltip" title="Python"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-gulp" data-toggle="tooltip" title="Gulp"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-grunt" data-toggle="tooltip" title="Grunt"></i>
+               </li>
+               <li class="list-inline-item">
+                  <i class="fab fa-npm" data-toggle="tooltip" title="NPM"></i>
+               </li>
+            </ul>
+            <div class="subheading mb-3">Workflow</div>
+            <ul class="fa-ul mb-0">
+               <li>
+                  <i class="fa-li fa fa-check"></i>
+                  Mobile-First, Responsive Design
+               </li>
+               <li>
+                  <i class="fa-li fa fa-check"></i>
+                  Cross Browser Testing &amp; Debugging
+               </li>
+               <li>
+                  <i class="fa-li fa fa-check"></i>
+                  Cross Functional Teams
+               </li>
+               <li>
+                  <i class="fa-li fa fa-check"></i>
+                  Agile Development &amp; Scrum
+               </li>
+            </ul>
+         </div>
+      </section>
+      <hr class="m-0">
+      <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="certifications">
+         <div class="w-100">
+            <h2 class="mb-5">Certifications</h2>
+            <ul class="fa-ul mb-0">
+               {% for certificate in certificates %}
+               <li>
+                  <div class="subheading">
+                     <i class="fa-li fas fa-certificate text-warning"></i>
+                     <a style="text-decoration: underline" href="{{ certificate.link }}" data-toggle="tooltip" title="Certificate Link" target="_blank">{{ certificate.name }}</a>
+                  </div>
+               </li>
+               {% endfor %}
+            </ul>
+         </div>
+      </section>
+      </div>
+      <!-- Portfolio Modals -->
+      <!-- Portfolio Modal 1 -->
+      {% for project in projects %}
+      <div class="portfolio-modal modal fade" id="portfolioModal{{ project.id }}" tabindex="-1" role="dialog" aria-labelledby="portfolioModal1Label" aria-hidden="true">
+         <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+               <span aria-hidden="true">
+               <i class="fas fa-times"></i>
+               </span>
+               </button>
+               <div class="modal-body text-center">
+                  <div class="container">
+                     <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                           <!-- Portfolio Modal - Title -->
+                           <h2 class="portfolio-modal-title text-secondary text-uppercase mb-0">{{ project.title }}</h2>
+                           <!-- Icon Divider -->
+                           <div class="divider-custom">
+                              <div class="divider-custom-line"></div>
+                              <div class="divider-custom-icon">
+                                 <i class="fas fa-star"></i>
+                              </div>
+                              <div class="divider-custom-line"></div>
+                           </div>
+                           <!-- Portfolio Modal - Image -->
+                           <img class="img-fluid rounded mb-5" src="{{ project.project_image.url }}" alt="">
+                           <!-- Portfolio Modal - Text -->
+                           <br>
+                           <p class="mb-5"><b><u>Description</u>: {{ project.description }}</b></p>
+                           <button class="btn btn-primary" href="#" >
+                           <a href="{{ project.github_link }}", target="_blank" style="color: #fff">Github Link</a>
+                           </button>
+                           {% if project.demo_link %}
+                           <button class="btn btn-primary" href="#" >
+                           <a href="{{ project.demo_link }}", target="_blank" style="color: #fff">Demo Link</a>
+                           </button>
+                           {% endif %}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      {% endfor %}
+      <!-- Visitor Count Code 
+         <a href='https://www.symptoma.es/'>symptom checker</a> 
+         <script type='text/javascript' src='https://www.freevisitorcounters.com/auth.php?id=72964f7102428a9773741dde55f04e10429e0ce5'>
+         </script>
+         <script type="text/javascript" src="https://www.freevisitorcounters.com/en/home/counter/632523/t/2">
+         </script>
+         -->
+      <!-- Bootstrap core JavaScript -->
+      <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+      <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+      <!-- Plugin JavaScript -->
+      <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+      <!-- Custom scripts for this template -->
+      <script src="{% static 'js/resume.min.js' %}"></script>
+      <script>
+         $(document).ready(function(){
+           $('[data-toggle="tooltip"]').tooltip();
+         });
+      </script>
+   </body>
+</html>

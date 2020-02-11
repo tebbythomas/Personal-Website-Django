@@ -1,0 +1,218 @@
+{% load static %}
+{% load humanize %}
+<!doctype html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>YouTube Playlist Analyzer</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+   </head>
+   <body>
+      <nav class="navbar navbar-expand-sm bg-danger">
+         <ul class="navbar-nav">
+            <li class="nav-item">
+               <a class="nav-link" style="color:white;" href="{% url 'yt-analyzer-index' %}">
+                  <h1>YouTube Playlist Analyzer</h1>
+               </a>
+            </li>
+         </ul>
+      </nav>
+      <br>
+      <div class="row mb-10">
+         <div class="col-lg-10 mx-auto">
+            <h5 class="font-weight-light mb-4 font-italic text-white">Default search bars with input group</h5>
+            <div class="bg-white p-5 rounded shadow">
+               <!-- Default search bars with input group -->
+               <form action="{% url 'yt-analyzer-index' %}">
+                  <div class="input-group mb-4">
+                     {% if Playlist_URL is None %}
+                     <input name="search" type="search" placeholder="Enter the url of a playlist" aria-describedby="button-addon5" class="form-control">
+                     {% else %}
+                     <input name="search" type="search" value="{{ Playlist_URL }}" aria-describedby="button-addon5" class="form-control">
+                     {% endif %}
+                     <div class="input-group-append">
+                        <button id="button-addon5" type="submit" class="btn btn-danger"><i class="fa fa-search"></i></button>
+                     </div>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      {% if Playlist_Title is not None %}
+      <br>
+      <br>
+      <div class="row mb-11">
+         <div class="col-lg-11 mx-auto">
+            <h2><u><b>Results:</u></b></h2>
+            <br>
+            <p><b>Playlist Title</b>: {{ Playlist_Title }}
+               <br><br><b>Channel Title</b>: {{ Channel_Title }}
+               <br><br>
+               <b>Total duration of playlist: {{ total_h }} hours, {{ total_m }} mins, {{ total_s }} secs</b><br><br>
+               Playlist has <b>{{ vid_count | intcomma }}</b> videos<br><br>
+               <b>Most viewed video</b> : {{ most_popular_vid }}<br><br>
+               <b>View Count</b>: {{ most_popular_vid_count | intcomma }}<br><br>
+               <b>Least viewed video</b> : {{ least_popular_vid }}<br><br>
+               <b>View Count</b>: {{ least_popular_vid_count | intcomma }}
+            </p>
+            <br>
+            <br>
+            <h2>
+               <u>Graphs</u>:<br>
+               <div id="container"></div>
+               <br>
+               <div id="container2"></div>
+               <br>
+               <div id="container3"></div>
+            </h2>
+         </div>
+      </div>
+      <script src="https://code.highcharts.com/highcharts.src.js"></script>
+      <script>
+         min_view_count = {{ least_popular_vid_count }};
+         median_view_count = {{ median_vid_views }};
+         mean_view_count = {{ mean_vid_views }};
+         max_view_count = {{ most_popular_vid_count }};
+         Highcharts.chart('container', {
+           chart: {
+               type: 'column'
+           },
+           tooltip: {
+            style: {
+             fontSize:'18px'
+           }
+          },
+           plotOptions: {
+             column: {
+                 colorByPoint: true
+             }
+           },
+           colors: [
+                     '#ff0000',
+                     '#41b6e6',
+                     '#0072ce',
+                     '#00ff00',
+           ],
+           title: {
+               text: 'Video View Counts',
+               style: {
+                fontSize:'25px'
+            }
+           },
+           xAxis: {
+               categories: ['Min View Count ', 'Median View Count', 'Mean View Count', 'Max View Count'],
+               labels: {
+                style: {
+                    fontSize:'20px'
+                }
+            }
+           },
+           series: [{
+               name: 'Number of Views',
+               data: [min_view_count, median_view_count, mean_view_count, max_view_count]
+           }]
+         });
+         shortest_duration_graph = {{ shortest_duration_graph }};
+         median_duration_graph = {{ median_duration_graph }};
+         mean_duration_graph = {{ mean_duration_graph }};
+         longest_duration_graph = {{ longest_duration_graph }};
+         Highcharts.chart('container2', {
+         chart: {
+             type: 'column',
+             style: {
+              fontFamily: 'Helvetica'
+          }
+         },
+         tooltip: {
+          style: {
+           fontSize:'18px'
+         }
+         },
+         plotOptions: {
+             column: {
+                 colorByPoint: true
+             }
+           },
+           colors: [
+                     '#ff0000',
+                     '#41b6e6',
+                     '#0072ce',
+                     '#00ff00',
+           ],
+         title: {
+             text: 'Duration in mins',
+             style: {
+              fontSize:'25px'
+          }
+         },
+         xAxis: {
+             categories: ['Min Video Duration ', 'Median Video Duration', 'Mean Video Duration', 'Max Video Duration'],
+             labels: {
+              style: {
+                  fontSize:'20px'
+              }
+          }
+         },
+         series: [{
+             name: 'Video Duration',
+             data: [shortest_duration_graph, median_duration_graph, mean_duration_graph, longest_duration_graph]
+         }]
+         });
+         like_percent = {{ avg_like_percent }};
+         dislike_percent = {{ avg_dislike_percent }};
+         Highcharts.chart('container3', {
+         chart: {
+           type: 'pie'
+         },
+         title: {
+           text: 'Average Like, Dislike % Per Video',
+           style: {
+            fontSize:'25px'
+          }
+         },
+         tooltip: {
+           pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+           style: {
+            fontSize:'18px'
+          }
+         },
+         plotOptions: {
+           pie: {
+             colors: [
+             '#00FF00',
+             '#FF0000',
+           ],
+             allowPointSelect: true,
+             cursor: 'pointer',
+             dataLabels: {
+               enabled: true,
+               style: {
+                fontSize: '20px'
+            }
+             }
+           }
+         },
+         series: [{
+           name: 'Value',
+           colorByPoint: true,
+           data: [{
+             name: 'Like%',
+             y: like_percent,
+             sliced: true,
+             selected: true,
+           }, {
+             name: 'Dislike%',
+             y: dislike_percent
+           }]
+         }]
+         });
+      </script>
+      {% endif %}
+   </body>
+</html>

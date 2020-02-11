@@ -1,0 +1,135 @@
+{% load static %}
+{% load humanize %}
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>YouTube Analyzer Search Results</title>
+</head>
+<body>
+<h1>YouTube Playlist Analyzer - Search Page</h1>
+<br>
+<p>Playlist Title: {{ Playlist_Title }}</p>
+<p>Channel Title: {{ Channel_Title }}</p>
+<p>Playlist has {{ vid_count | intcomma }} videos</p>
+<p>Total duration of playlist: {{ total_h }} hours, {{ total_m }} mins, {{ total_s }} secs</p>
+<p>Most viewed video : {{ most_popular_vid }}</p>
+<p>View Count: {{ most_popular_vid_count | intcomma }}</p>
+<p>Least viewed video : {{ least_popular_vid }}</p>
+<p>View Count: {{ least_popular_vid_count | intcomma }}</p>
+<p>View Count Graph:</p>
+<div id="container"></div>
+<div id="container2"></div>
+<div id="container3"></div>
+
+<script src="https://code.highcharts.com/highcharts.src.js"></script>
+<script>
+    min_view_count = {{ least_popular_vid_count }};
+    median_view_count = {{ median_vid_views }};
+    mean_view_count = {{ mean_vid_views }};
+    max_view_count = {{ most_popular_vid_count }};
+  Highcharts.chart('container', {
+      chart: {
+          type: 'column'
+      },
+      plotOptions: {
+        column: {
+            colorByPoint: true
+        }
+      },
+      colors: [
+                '#ff0000',
+                '#41b6e6',
+                '#0072ce',
+                '#00ff00',
+      ],
+      title: {
+          text: 'Video View Counts'
+      },
+      xAxis: {
+          categories: ['Min View Count ', 'Median View Count', 'Mean View Count', 'Max View Count']
+      },
+      series: [{
+          name: 'Number of Views',
+          data: [min_view_count, median_view_count, mean_view_count, max_view_count]
+      }]
+  });
+  shortest_duration_graph = {{ shortest_duration_graph }};
+  median_duration_graph = {{ median_duration_graph }};
+  mean_duration_graph = {{ mean_duration_graph }};
+  longest_duration_graph = {{ longest_duration_graph }};
+  Highcharts.chart('container2', {
+    chart: {
+        type: 'column'
+    },
+    plotOptions: {
+        column: {
+            colorByPoint: true
+        }
+      },
+      colors: [
+                '#ff0000',
+                '#41b6e6',
+                '#0072ce',
+                '#00ff00',
+      ],
+    title: {
+        text: 'Duration in mins'
+    },
+    xAxis: {
+        categories: ['Min Video Duration ', 'Median Video Duration', 'Mean Video Duration', 'Max Video Duration']
+    },
+    series: [{
+        name: 'Video Duration',
+        data: [shortest_duration_graph, median_duration_graph, mean_duration_graph, longest_duration_graph]
+    }]
+  });
+  like_percent = {{ avg_like_percent }};
+  dislike_percent = {{ avg_dislike_percent }};
+  Highcharts.chart('container3', {
+    chart: {
+      type: 'pie'
+    },
+    title: {
+      text: 'Average Like, Dislike % Per Video'
+    },
+    tooltip: {
+      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+    },
+    plotOptions: {
+      pie: {
+        colors: [
+        '#00FF00',
+        '#FF0000',
+      ],
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true
+        }
+      }
+    },
+    series: [{
+      name: 'Value',
+      colorByPoint: true,
+      data: [{
+        name: 'Like%',
+        y: like_percent,
+        sliced: true,
+        selected: true
+      }, {
+        name: 'Dislike%',
+        y: dislike_percent
+      }]
+    }]
+  });
+</script>
+</body>
+</html>
+<!-- <p>Average video view count : {{ avg_vid_views | intcomma }}</p>
+<p>Average video duration : {{ avg_h }} hours, {{ avg_m }} mins, {{ avg_s }} secs</p>
+<p>Longest video : {{ longest_vid }}</p>
+<p>Duration : {{ longest_h }} hours, {{ longest_m }} mins, {{ longest_s }} secs</p>
+<p>Shortest video : {{ shortest_vid }}</p>
+<p>Duration : {{ shortest_h }} hours, {{ shortest_m }} mins, {{ shortest_s }} secs</p>
+<p>Average Like Percent : {{ avg_like_percent }}</p> -->
